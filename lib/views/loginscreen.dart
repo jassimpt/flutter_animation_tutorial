@@ -1,4 +1,5 @@
 import 'package:animation_tutorial/views/listscreen.dart';
+import 'package:animation_tutorial/views/widgets/rocketanimater.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1), // Set your desired duration
+      duration: const Duration(seconds: 1),
     );
 
     _offsetAnimation = Tween<Offset>(
@@ -30,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen>
       curve: Curves.easeInOut,
     ));
 
-    // Start the animation
     _controller.forward();
   }
 
@@ -39,6 +39,9 @@ class _LoginScreenState extends State<LoginScreen>
     _controller.dispose();
     super.dispose();
   }
+
+  List languages = ["english", "malayalam", "hindhi"];
+  String firstvalue = "english";
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +58,25 @@ class _LoginScreenState extends State<LoginScreen>
         ),
       ),
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: [
+            DropdownButton(
+              value: firstvalue,
+              items: languages
+                  .map((e) => DropdownMenuItem<String>(
+                        child: Text(e),
+                        value: e,
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  firstvalue = value!;
+                });
+              },
+            )
+          ],
+        ),
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Center(
@@ -142,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ListScreen(),
+                              builder: (context) => const ListScreen(),
                             ));
                       },
                       child: Container(
@@ -170,43 +192,6 @@ class _LoginScreenState extends State<LoginScreen>
           ),
         ),
       ),
-    );
-  }
-}
-
-class RocketAnimator extends StatefulWidget {
-  const RocketAnimator({super.key});
-
-  @override
-  State<RocketAnimator> createState() => _RocketAnimatorState();
-}
-
-class _RocketAnimatorState extends State<RocketAnimator>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller =
-      AnimationController(vsync: this, duration: const Duration(seconds: 3))
-        ..repeat(reverse: true);
-  late final Animation<Offset> _animation = Tween(
-    begin: Offset.zero,
-    end: const Offset(0, 0.15),
-  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.asset('assets/images/clouds.png'),
-        SlideTransition(
-          position: _animation,
-          child: Image.asset('assets/images/rocket_person.png'),
-        ),
-      ],
     );
   }
 }
