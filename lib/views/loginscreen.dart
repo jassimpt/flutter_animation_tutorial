@@ -1,7 +1,9 @@
+import 'package:animation_tutorial/main.dart';
 import 'package:animation_tutorial/views/listscreen.dart';
 import 'package:animation_tutorial/views/widgets/rocketanimater.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -40,8 +42,7 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
-  List languages = ["english", "malayalam", "hindhi"];
-  String firstvalue = "english";
+  List languages = ["en", "ml", "hi"];
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +63,18 @@ class _LoginScreenState extends State<LoginScreen>
           backgroundColor: Colors.transparent,
           actions: [
             DropdownButton(
-              value: firstvalue,
+              underline: SizedBox(),
+              icon: Icon(Icons.language),
               items: languages
                   .map((e) => DropdownMenuItem<String>(
                         child: Text(e),
                         value: e,
                       ))
                   .toList(),
-              onChanged: (value) {
-                setState(() {
-                  firstvalue = value!;
-                });
+              onChanged: (language) {
+                if (language != null) {
+                  MyApp.setLocale(context, Locale(language));
+                }
               },
             )
           ],
@@ -92,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen>
                 SlideTransition(
                   position: _offsetAnimation,
                   child: Text(
-                    'Hi there',
+                    AppLocalizations.of(context)!.hiThere,
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       color: Colors.white,
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen>
                 SlideTransition(
                   position: _offsetAnimation,
                   child: Text(
-                    'Lets Get Started',
+                    AppLocalizations.of(context)!.letsGetStarted,
                     style: GoogleFonts.poppins(
                       fontSize: 30,
                       color: Colors.white,
@@ -121,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen>
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
-                        hintText: 'Username',
+                        hintText: AppLocalizations.of(context)!.username,
                         prefixIcon: const Icon(Icons.person),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -142,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen>
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
-                        hintText: 'Password',
+                        hintText: AppLocalizations.of(context)!.password,
                         prefixIcon: const Icon(Icons.lock),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -176,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                         child: Center(
                           child: Text(
-                            'Login now',
+                            AppLocalizations.of(context)!.loginNow,
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
